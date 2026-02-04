@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Acessar Telegram</title>
+    <title>Acessar Conteúdo</title>
     <style>
         :root {
             --roxo: #8a2be2;
@@ -32,6 +32,7 @@
             align-items: center;
         }
 
+        /* HEADER */
         .header {
             width: 100%;
             display: flex;
@@ -64,11 +65,7 @@
             border: 1px solid #444;
         }
 
-        .dropdown div {
-            padding: 12px 25px;
-            cursor: pointer;
-            border-bottom: 1px solid #333;
-        }
+        .dropdown div { padding: 12px 25px; cursor: pointer; border-bottom: 1px solid #333; }
 
         .main-title {
             font-size: 18px;
@@ -78,9 +75,10 @@
             letter-spacing: 1px;
         }
 
+        /* ÁREA DO GIF 16:9 PREENCHENDO TUDO */
         .preview-box {
             width: 100%;
-            aspect-ratio: 16/10;
+            aspect-ratio: 16/9; /* Proporção exata */
             background: #000;
             border-radius: 15px;
             display: flex;
@@ -88,20 +86,18 @@
             align-items: center;
             margin-bottom: 25px;
             border: 1px solid #222;
+            overflow: hidden; /* Garante que o GIF não saia da borda arredondada */
+            position: relative;
         }
 
-        .check-icon {
-            width: 90px;
-            height: 90px;
-            background: #4ade80;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            color: #fff;
+        .gif-principal {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz o GIF preencher todo o quadrado sem distorcer */
+            display: block;
         }
 
+        /* CARD TUTORIAL */
         .tutorial-card {
             background: var(--card);
             border: 1.5px solid var(--borda-card);
@@ -113,15 +109,10 @@
             text-align: left;
         }
 
-        .tutorial-card p {
-            margin-bottom: 15px;
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
+        .tutorial-card p { margin-bottom: 15px; font-size: 15px; font-weight: 600; line-height: 1.4; }
         .purple-tag { color: #a855f7; font-weight: 800; }
 
+        /* BOTÃO COM SPINNER */
         #main-btn {
             width: 100%;
             background: #222;
@@ -135,6 +126,7 @@
             font-weight: bold;
             text-transform: uppercase;
             font-size: 15px;
+            min-height: 60px;
         }
 
         .btn-active {
@@ -143,7 +135,7 @@
             box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
         }
 
-        .loader {
+        .spinner {
             width: 24px;
             height: 24px;
             border: 3px solid rgba(255,255,255,0.1);
@@ -180,13 +172,13 @@
         <div class="main-title" id="txt-title">SIGA O TUTORIAL</div>
 
         <div class="preview-box">
-            <div class="check-icon">✓</div>
+            <img src="https://i.imgur.com/w55irUi.gif" class="gif-principal">
         </div>
 
         <div class="tutorial-card" id="txt-steps"></div>
 
         <button id="main-btn">
-            <div class="loader" id="btn-loader"></div>
+            <div class="spinner" id="btn-loader"></div>
             <span id="btn-text" style="display:none;">ACESSAR AGORA</span>
         </button>
 
@@ -197,9 +189,9 @@
         const REDIRECT_URL = "https://t.me/marianasapequinha_bot";
 
         const translations = {
-            pt: { title: "SIGA O TUTORIAL", footer: "ABRA NO NAVEGADOR PARA CONTINUAR", btn: "ACESSAR AGORA", flag: "🇧🇷", steps: ["1) TOQUE NOS <span class='purple-tag'>TRÊS PONTINHOS</span> (SUPERIOR)", "2) ESCOLHA <span class='purple-tag'>\"ABRIR NO NAVEGADOR\"</span>", "3) O BOTÃO FICARÁ <span class='purple-tag'>ROXO AUTOMATICAMENTE</span>"] },
-            es: { title: "SIGA EL TUTORIAL", footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR", btn: "ACCEDER AHORA", flag: "🇪🇸", steps: ["1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)", "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>", "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"] },
-            en: { title: "FOLLOW THE TUTORIAL", footer: "OPEN IN BROWSER TO CONTINUE", btn: "ACCESS NOW", flag: "🇺🇸", steps: ["1) TAP THE <span class='purple-tag'>THREE DOTS</span> (TOP CORNER)", "2) CHOOSE <span class='purple-tag'>\"OPEN IN BROWSER\"</span>", "3) THE BUTTON WILL TURN <span class='purple-tag'>PURPLE AUTOMATICALLY</span>"] }
+            pt: { title: "SIGA O TUTORIAL", footer: "ABRA NO NAVEGADOR PARA CONTINUAR", btn: "ACESSAR AGORA", steps: ["1) TOQUE NOS <span class='purple-tag'>TRÊS PONTINHOS</span> (SUPERIOR)", "2) ESCOLHA <span class='purple-tag'>\"ABRIR NO NAVEGADOR\"</span>", "3) O BOTÃO FICARÁ <span class='purple-tag'>ROXO AUTOMATICAMENTE</span>"] },
+            es: { title: "SIGA EL TUTORIAL", footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR", btn: "ACCEDER AHORA", steps: ["1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)", "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>", "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"] },
+            en: { title: "FOLLOW THE TUTORIAL", footer: "OPEN IN BROWSER TO CONTINUE", btn: "ACCESS NOW", steps: ["1) TAP THE <span class='purple-tag'>THREE DOTS</span> (TOP CORNER)", "2) CHOOSE <span class='purple-tag'>\"OPEN IN BROWSER\"</span>", "3) THE BUTTON WILL TURN <span class='purple-tag'>PURPLE AUTOMATICALLY</span>"] }
         };
 
         function toggleDropdown() {
@@ -213,29 +205,29 @@
             document.getElementById('txt-footer').innerText = d.footer;
             document.getElementById('txt-steps').innerHTML = d.steps.map(s => `<p>${s}</p>`).join('');
             document.getElementById('cur-lang').innerText = lang.toUpperCase();
-            document.getElementById('cur-flag').innerText = d.flag;
+            document.getElementById('cur-flag').innerText = lang === 'pt' ? '🇧🇷' : lang === 'es' ? '🇪🇸' : '🇺🇸';
             document.getElementById('btn-text').innerText = d.btn;
             document.getElementById('lang-dd').style.display = 'none';
         }
 
         function checkEnvironment() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            const isApp = /TikTok|Instagram|FBAN|FBAV|Messenger|Line|Snapchat/i.test(ua);
-            const isWebView = /iPhone|iPod|iPad/.test(ua) ? (!window.navigator.standalone && !/Safari/.test(ua)) : /wv/.test(ua);
+            const ua = navigator.userAgent.toLowerCase();
+            const isChrome = ua.includes("chrome") || ua.includes("crios");
+            const isSafari = ua.includes("safari") && !ua.includes("chrome") && !ua.includes("android");
+            const isSamsung = ua.includes("samsungbrowser");
+            const isBlocked = /tiktok|instagram|fbav|fban|messenger|snapchat|wv|bytedance/i.test(ua);
 
-            // Se NÃO estiver no app e NÃO for webview (ou seja, navegador real)
-            if (!isApp && !isWebView) {
+            if ((isChrome || isSafari || isSamsung) && !isBlocked) {
                 const btn = document.getElementById('main-btn');
                 btn.classList.add('btn-active');
                 document.getElementById('btn-loader').style.display = 'none';
                 document.getElementById('btn-text').style.display = 'block';
-                
                 btn.onclick = () => { window.location.href = REDIRECT_URL; };
             }
         }
 
         updateLang('pt');
-        checkEnvironment();
+        setTimeout(checkEnvironment, 800);
 
         window.onclick = (e) => {
             if (!e.target.closest('.header')) document.getElementById('lang-dd').style.display = 'none';
