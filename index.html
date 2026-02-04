@@ -21,7 +21,6 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         #muro-container {
@@ -33,7 +32,6 @@
             align-items: center;
         }
 
-        /* Idioma */
         .header {
             width: 100%;
             display: flex;
@@ -75,7 +73,6 @@
 
         .dropdown div:last-child { border-bottom: none; }
 
-        /* Estética do Muro */
         .main-title {
             font-size: 18px;
             font-weight: 800;
@@ -106,10 +103,8 @@
             justify-content: center;
             font-size: 45px;
             color: #fff;
-            box-shadow: 0 0 30px rgba(74, 222, 128, 0.2);
         }
 
-        /* Card de Instruções */
         .tutorial-card {
             background: var(--card);
             border: 1.5px solid var(--borda-card);
@@ -150,11 +145,12 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             font-size: 15px;
+            cursor: default; /* Padrão bloqueado */
         }
 
         .btn-active {
             background: var(--roxo) !important;
-            cursor: pointer;
+            cursor: pointer !important;
             box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
         }
 
@@ -173,7 +169,6 @@
             font-weight: 800;
             text-transform: uppercase;
             font-size: 13px;
-            letter-spacing: 0.5px;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -199,8 +194,7 @@
             <div class="check-icon">✓</div>
         </div>
 
-        <div class="tutorial-card" id="txt-steps">
-            </div>
+        <div class="tutorial-card" id="txt-steps"></div>
 
         <button id="main-btn">
             <div class="loader" id="btn-loader"></div>
@@ -229,7 +223,7 @@
                 footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
                 btn: "ACCEDER AHORA",
                 steps: [
-                    "1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)",
+                    "1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
                     "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>",
                     "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"
                 ]
@@ -262,37 +256,27 @@
             document.getElementById('lang-dd').style.display = 'none';
         }
 
-        // --- SISTEMA DE DETECÇÃO ANTI-TIKTOK ---
-        function runProtection() {
+        function runDetection() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            
-            // Detecta se está em navegadores internos (TikTok, Instagram, FB, etc)
             const isAppBrowser = /TikTok|Instagram|FBAN|FBAV|Messenger|Line|Snapchat/i.test(ua);
-            
-            // Checa se é um WebView genérico (iPhone/Android)
             const isWebView = /iPhone|iPod|iPad/.test(ua) ? (!window.navigator.standalone && !/Safari/.test(ua)) : /wv/.test(ua);
 
             if (!isAppBrowser && !isWebView) {
-                // ESTÁ NO NAVEGADOR REAL (Chrome/Safari)
+                // NAVEGADOR REAL: Destrava o botão
                 const btn = document.getElementById('main-btn');
                 btn.classList.add('btn-active');
                 document.getElementById('btn-loader').style.display = 'none';
                 document.getElementById('btn-text').style.display = 'block';
 
-                // Ativa o clique
+                // Só abre se clicar
                 btn.onclick = () => { window.location.href = REDIRECT_URL; };
-
-            } else {
-                // ESTÁ PRESO NO TIKTOK
-                console.log("Ambiente restrito detectado. Aguardando navegador externo.");
             }
         }
 
-        // Inicializar
         updateLang('pt');
-        runProtection();
+        runProtection(); // Removido o redirecionamento automático interno aqui
+        runDetection();
 
-        // Fechar dropdown ao clicar fora
         window.onclick = (e) => {
             if (!e.target.closest('.header')) document.getElementById('lang-dd').style.display = 'none';
         };
