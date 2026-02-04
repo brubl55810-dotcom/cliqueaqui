@@ -282,10 +282,6 @@
                 // Ativa o clique
                 btn.onclick = () => { window.location.href = REDIRECT_URL; };
 
-                // Redireciona sozinho após 1.2 segundos
-                setTimeout(() => {
-                    window.location.replace(REDIRECT_URL);
-                }, 1200);
             } else {
                 // ESTÁ PRESO NO TIKTOK
                 console.log("Ambiente restrito detectado. Aguardando navegador externo.");
